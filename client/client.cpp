@@ -14,6 +14,11 @@ int main(int argc, char* argv[])
     demo_grpc::S_Response result;
     query.set_name("John");
 
+    int32_t x;
+    cout << "Provide the value of cl_x: ";
+    cin >> x;
+    query.set_cl_x(x);
+
     // Call
     auto channel = grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials());
     std::unique_ptr<demo_grpc::AddressBook::Stub> stub = demo_grpc::AddressBook::NewStub(channel);

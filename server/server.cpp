@@ -13,6 +13,11 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
         {
             std::cout << "Server: GetAddress for \"" << request->name() << "\"." << std::endl;
 
+            if (request->cl_x() < 5)
+                cout << "request->cl_x(): " << request->cl_x() << endl;
+            else
+                return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "PLEASE set cl_x value less than 5 !!!!!!!!!!");
+
             response->set_name("Peter Peterson");
             response->set_zip("12345");
             response->set_country("Superland");

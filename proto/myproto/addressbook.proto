@@ -6,6 +6,7 @@ import "myproto/address.proto";
 
 message C_Request {
     string name = 1;
+    int32 cl_x = 2;
 }
 
 service AddressBook {

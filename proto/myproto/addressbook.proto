@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package demo_grpc;
+
+import "myproto/address.proto";
+
+message C_Request {
+    string name = 1;
+}
+
+service AddressBook {
+    rpc GetAddress(C_Request) returns (S_Response) {}
+}

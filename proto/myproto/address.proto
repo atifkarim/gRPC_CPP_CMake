@@ -8,4 +8,6 @@ message S_Response {
     string zip      = 3;
     string city     = 4;
     string country  = 5;
+
+    int32 double_init_val = 6;
 }

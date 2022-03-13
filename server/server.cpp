@@ -4,6 +4,8 @@
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/server_builder.h>
 
+#include "random_function.h"
+
 #include <iostream>
 
 void Check_Value(const ::demo_grpc::C_Request* request)
@@ -49,8 +51,28 @@ void RunServer()
 	std::cout << "grpc Version: " << grpc::Version() << std::endl;
 	std::string server_address = "localhost:50051";
 	std::cout << "Address of server: " << server_address << std::endl;
+
+	// ssl tsl try
+	std::string key;
+	std::string cert;
+	std::string root;
+
+	read ( "server.crt", cert );
+	read ( "server.key", key );
+	read ( "ca.crt", root );
+
+	grpc::SslServerCredentialsOptions::PemKeyCertPair keycert =
+	{
+		key,
+		cert
+	};
+
+	grpc::SslServerCredentialsOptions sslOps;
+	sslOps.pem_root_certs = root;
+	sslOps.pem_key_cert_pairs.push_back ( keycert );
+
 	grpc::ServerBuilder builder;
-	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+	builder.AddListeningPort(server_address, grpc::SslServerCredentials( sslOps ));
 
 	AddressBookService my_service;
 	builder.RegisterService(&my_service);

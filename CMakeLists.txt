@@ -15,7 +15,8 @@ set(MAIN_TARGET_NAME ${PROJECT_NAME})
 add_executable(${MAIN_TARGET_NAME}_server ${${PROJECT_NAME}_SOURCE_DIR}/server/server.cpp)
 
 # Include directory (generated proto header files) for the server target
-target_include_directories(${MAIN_TARGET_NAME}_server PUBLIC ${CMAKE_BINARY_DIR}/proto/myproto)
+target_include_directories(${MAIN_TARGET_NAME}_server PUBLIC ${CMAKE_BINARY_DIR}/proto/myproto
+                                                             ${${PROJECT_NAME}_SOURCE_DIR}/include)
 
 # Link the server target to exported fw lib, proto lib
 target_link_libraries(${MAIN_TARGET_NAME}_server proto_lib)
@@ -28,7 +29,8 @@ set_target_properties(${MAIN_TARGET_NAME}_server PROPERTIES RUNTIME_OUTPUT_DIREC
 add_executable(${MAIN_TARGET_NAME}_client ${${PROJECT_NAME}_SOURCE_DIR}/client/client.cpp)
 
 # Include directory (generated proto header files) for the client target
-target_include_directories(${MAIN_TARGET_NAME}_client PUBLIC ${CMAKE_BINARY_DIR}/proto/myproto)
+target_include_directories(${MAIN_TARGET_NAME}_client PUBLIC ${CMAKE_BINARY_DIR}/proto/myproto
+                                                             ${${PROJECT_NAME}_SOURCE_DIR}/include)
 
 # Link the client target to proto lib
 target_link_libraries(${MAIN_TARGET_NAME}_client proto_lib)

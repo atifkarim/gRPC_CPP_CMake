@@ -4,6 +4,8 @@
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/create_channel.h>
 
+#include "random_function.h"
+
 #include <iostream>
 using namespace std;
 
@@ -11,6 +13,22 @@ int main(int argc, char* argv[])
 {
 	std::string client_address = "localhost:50051";
 	std::cout << "Address of client: " << client_address << std::endl;
+
+	// ssl tsl try
+	std::string cert;
+	std::string key;
+	std::string root;
+
+	read ( "client.crt", cert );
+	read ( "client.key", key );
+	read ( "ca.crt", root );
+
+	grpc::SslCredentialsOptions opts =
+	{
+		root,
+		key,
+		cert
+	};
 
 	// Setup request
 	demo_grpc::C_Request query;
@@ -26,7 +44,7 @@ int main(int argc, char* argv[])
 	query.set_init_val(x);
 
 	// Call
-	auto channel = grpc::CreateChannel(client_address, grpc::InsecureChannelCredentials());
+	auto channel = grpc::CreateChannel(client_address, grpc::SslCredentials ( opts ));
 	std::unique_ptr<demo_grpc::AddressBook::Stub> stub = demo_grpc::AddressBook::NewStub(channel);
 	grpc::ClientContext context;
 	grpc::Status status = stub->GetAddress(&context, query, &result);

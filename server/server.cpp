@@ -1,16 +1,15 @@
 #include <myproto/address.pb.h>
 #include <myproto/addressbook.grpc.pb.h>
 
-#include <grpc/grpc.h>
+#include <grpcpp/grpcpp.h>
 #include <grpcpp/server_builder.h>
 
 #include <iostream>
-using namespace std;
 
 void Check_Value(const ::demo_grpc::C_Request* request)
 {
 	if (request->cl_x() < 5)
-		cout << "Check_Value request->cl_x(): " << request->cl_x() << endl;
+		std::cout << "Check_Value request->cl_x(): " << request->cl_x() << std::endl;
 	else
 		throw std::runtime_error("********** BAD VALUE **********");
 }
@@ -22,7 +21,7 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			std::cout << "Server: GetAddress for \"" << request->name() << "\"." << std::endl;
 
 			if (request->cl_x() < 5)
-				cout << "request->cl_x(): " << request->cl_x() << endl;
+				std::cout << "request->cl_x(): " << request->cl_x() << std::endl;
 			else
 				return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "PLEASE set cl_x value less than 5 !!!!!!!!!!");
 
@@ -36,6 +35,7 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 
 int main(int argc, char* argv[])
 {
+	std::cout << "grpc Version: " << grpc::Version() << std::endl;
 	grpc::ServerBuilder builder;
 	builder.AddListeningPort("0.0.0.0:50051", grpc::InsecureServerCredentials());
 

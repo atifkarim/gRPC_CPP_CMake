@@ -38,6 +38,7 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			response->set_name("Peter Peterson");
 			response->set_zip("12345");
 			response->set_country("Superland");
+			response->set_double_init_val(request->init_val() * 2);
 
 			return grpc::Status::OK;
 		}

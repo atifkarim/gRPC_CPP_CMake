@@ -33,24 +33,29 @@ int main(int argc, char* argv[])
 
 	if (status.ok()) {
 		// Output result
-		std::cout << "I got:" << std::endl;
-		std::cout << "Name: " << result.name() << std::endl;
-		std::cout << "City: " << result.city() << std::endl;
-		std::cout << "Zip:  " << result.zip() << std::endl;
-		std::cout << "Street: " << result.street() << std::endl;
-		std::cout << "Country: " << result.country() << std::endl;
+		std::cout << "Response from Server:" << std::endl;
+		std::cout << "Name:              " << result.name() << std::endl;
+		std::cout << "City:              " << result.city() << std::endl;
+		std::cout << "Zip:               " << result.zip() << std::endl;
+		std::cout << "Street:            " << result.street() << std::endl;
+		std::cout << "Country:           " << result.country() << std::endl;
+		std::cout << "Doubled Init Val:  " << result.double_init_val() << std::endl;
 		return 0;
-	} else {
-	  // ouch!
-	  // lets print the gRPC error message
-	//   std::cout << status.error_message() << std::endl;
+	}
+	else
+	{
+		// lets print the gRPC error message
+		// std::cout << status.error_message() << std::endl;
 
-	  // lets print the error code, which is 3
-	//   std::cout << status.error_code() << std::endl;
-	  // want to do some specific action based on the error?
-	  if(status.error_code() == grpc::StatusCode::INVALID_ARGUMENT) {
-	    std::cout << status.error_message() << std::endl;
-	  }
-	  return 0;
+		// lets print the error code, which is 3
+		// std::cout << status.error_code() << std::endl;
+
+		// want to do some specific action based on the error?
+		if(status.error_code() == grpc::StatusCode::INVALID_ARGUMENT)
+		{
+			std::cout << status.error_message() << std::endl;
+		}
+
+	return 0;
 	}
 }

@@ -33,17 +33,23 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 		}
 };
 
-int main(int argc, char* argv[])
+void RunServer()
 {
 	std::cout << "grpc Version: " << grpc::Version() << std::endl;
+	std::string server_address = "localhost:50051";
+	std::cout << "Address of server: " << server_address << std::endl;
 	grpc::ServerBuilder builder;
-	builder.AddListeningPort("0.0.0.0:50051", grpc::InsecureServerCredentials());
+	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
 
 	AddressBookService my_service;
 	builder.RegisterService(&my_service);
 
 	std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
 	server->Wait();
+}
 
+int main(int argc, char* argv[])
+{
+	RunServer();
 	return 0;
 }

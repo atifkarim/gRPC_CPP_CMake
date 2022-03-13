@@ -8,10 +8,10 @@
 
 void Check_Value(const ::demo_grpc::C_Request* request)
 {
-	if (request->cl_x() < 5)
-		std::cout << "Check_Value request->cl_x(): " << request->cl_x() << std::endl;
+	if (request->init_val() < 5)
+		std::cout << "Client is requested for value: " << request->init_val() << std::endl;
 	else
-		throw std::runtime_error("********** BAD VALUE **********");
+		throw std::runtime_error("Please chose less than 5");
 }
 
 class AddressBookService final : public demo_grpc::AddressBook::Service {
@@ -20,10 +20,20 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 		{
 			std::cout << "Server: GetAddress for \"" << request->name() << "\"." << std::endl;
 
-			if (request->cl_x() < 5)
-				std::cout << "request->cl_x(): " << request->cl_x() << std::endl;
-			else
-				return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "PLEASE set cl_x value less than 5 !!!!!!!!!!");
+			// if (request->init_val() < 5)
+			// 	std::cout << "request->init_val(): " << request->init_val() << std::endl;
+			// else
+			// 	return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "PLEASE set init_val value less than 5 !!!!!!!!!!");
+
+			try
+			{
+				Check_Value(request);
+			}
+			catch(const std::exception& e)
+			{
+				std::cout << e.what() << std::endl;
+				return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+			}
 
 			response->set_name("Peter Peterson");
 			response->set_zip("12345");

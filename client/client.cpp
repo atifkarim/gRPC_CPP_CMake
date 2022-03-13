@@ -15,12 +15,15 @@ int main(int argc, char* argv[])
 	// Setup request
 	demo_grpc::C_Request query;
 	demo_grpc::S_Response result;
+
+	// Value is statically set here
 	query.set_name("John");
 
+	// Value to check the error handler part.
 	int32_t x;
-	cout << "Provide the value of cl_x: ";
+	cout << "Requesting init_val: ";
 	cin >> x;
-	query.set_cl_x(x);
+	query.set_init_val(x);
 
 	// Call
 	auto channel = grpc::CreateChannel(client_address, grpc::InsecureChannelCredentials());
@@ -40,14 +43,14 @@ int main(int argc, char* argv[])
 	} else {
 	  // ouch!
 	  // lets print the gRPC error message
-	  // which is "Length of `Name` cannot be more than 10 characters"
-	  std::cout << status.error_message() << std::endl;
+	//   std::cout << status.error_message() << std::endl;
+
 	  // lets print the error code, which is 3
 	//   std::cout << status.error_code() << std::endl;
 	  // want to do some specific action based on the error?
-	//   if(status.error_code() == StatusCode::INVALID_ARGUMENT) {
-	//     // do your thing here
-	//   }
+	  if(status.error_code() == grpc::StatusCode::INVALID_ARGUMENT) {
+	    std::cout << status.error_message() << std::endl;
+	  }
 	  return 0;
 	}
 }

@@ -4,10 +4,42 @@
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/create_channel.h>
 
+#include "address_request.h"
 #include "random_function.h"
 
 #include <iostream>
 using namespace std;
+
+// This function prompts the user to set value for the required area
+void Client_Request(demo_grpc::C_Request &request_)
+{
+	unsigned int choose_area_ ;
+	std::cout << "Choose Desired Area" << std::endl
+	          << "-------------------" << std::endl
+	          << "Address         : 0" << std::endl
+	          << "Check Value     : 1" << std::endl
+	          << "Stream Data     : 2" << std::endl;
+
+	std::cin >> choose_area_;
+	request_.set_choose_area(choose_area_);
+
+	switch(request_.choose_area())
+	{
+		case 0: address_request(request_); break;
+		case 1: check_value_request(request_); break;
+		default: throw std::runtime_error("No Service is added against this Wish"); break;
+	}
+}
+
+// According to Client Request this function display the value of protobuf message
+void Server_Response(demo_grpc::C_Request &request_, const demo_grpc::S_Response &response_)
+{
+	switch(request_.choose_area())
+	{
+		case 0: address_response(request_, response_); break;
+		case 1: check_value_response(request_, response_); break;
+	}
+}
 
 int main(int argc, char* argv[])
 {
@@ -18,14 +50,7 @@ int main(int argc, char* argv[])
 	demo_grpc::C_Request query;
 	demo_grpc::S_Response result;
 
-	// Value is statically set here
-	query.set_name("John");
-
-	// Value to check the error handler part.
-	int32_t x;
-	cout << "Requesting init_val: ";
-	cin >> x;
-	query.set_init_val(x);
+	Client_Request(query);
 
 	// ssl_tsl try from gRPC source code
 	constexpr char kCaCertPath[] = "/home/atif/grpc/src/core/tsi/test_creds/ca.pem";
@@ -42,31 +67,17 @@ int main(int argc, char* argv[])
 	grpc::ClientContext context;
 	grpc::Status status = stub->GetAddress(&context, query, &result);
 
-	if (status.ok()) {
-		// Output result
-		std::cout << "Response from Server:" << std::endl;
-		std::cout << "Name:              " << result.name() << std::endl;
-		std::cout << "City:              " << result.city() << std::endl;
-		std::cout << "Zip:               " << result.zip() << std::endl;
-		std::cout << "Street:            " << result.street() << std::endl;
-		std::cout << "Country:           " << result.country() << std::endl;
-		std::cout << "Doubled Init Val:  " << result.double_init_val() << std::endl;
-		return 0;
+	if (status.ok())
+	{
+		Server_Response(query, result);
 	}
 	else
 	{
-		// lets print the gRPC error message
-		// std::cout << status.error_message() << std::endl;
-
-		// lets print the error code, which is 3
-		// std::cout << status.error_code() << std::endl;
-
-		// want to do some specific action based on the error?
 		if(status.error_code() == grpc::StatusCode::INVALID_ARGUMENT)
 		{
 			std::cout << status.error_message() << std::endl;
 		}
+	}
 
 	return 0;
-	}
 }

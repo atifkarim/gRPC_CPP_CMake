@@ -4,44 +4,43 @@
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/server_builder.h>
 
+#include "address_response.h"
 #include "random_function.h"
 
 #include <iostream>
-
-void Check_Value(const ::demo_grpc::C_Request* request)
-{
-	if (request->init_val() < 5)
-		std::cout << "Client is requested for value: " << request->init_val() << std::endl;
-	else
-		throw std::runtime_error("Please chose less than 5");
-}
 
 class AddressBookService final : public demo_grpc::AddressBook::Service {
 	public:
 		virtual ::grpc::Status GetAddress(::grpc::ServerContext* context, const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
 		{
-			std::cout << "Server: GetAddress for \"" << request->name() << "\"." << std::endl;
-
-			// if (request->init_val() < 5)
-			// 	std::cout << "request->init_val(): " << request->init_val() << std::endl;
-			// else
-			// 	return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "PLEASE set init_val value less than 5 !!!!!!!!!!");
-
-			try
+			switch (request->choose_area())
 			{
-				Check_Value(request);
-			}
-			catch(const std::exception& e)
-			{
-				std::cout << e.what() << std::endl;
-				return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+			case 0:
+				try
+				{
+					Set_Value_Address(request, response);
+				}
+				catch(const std::exception& e)
+				{
+					std::cout << e.what() << std::endl;
+					return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+				}
+			break;
+
+			case 1:
+				try
+				{
+					Set_Check_Value(request, response);
+				}
+				catch(const std::exception& e)
+				{
+					std::cout << e.what() << std::endl;
+					return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+				}
+			break;
 			}
 
-			response->set_name("Peter Peterson");
-			response->set_zip("12345");
-			response->set_country("Superland");
-			response->set_double_init_val(request->init_val() * 2);
-
+			std::cout << "Information of " << request->choose_area() << " is sent to Client" << std::endl;
 			return grpc::Status::OK;
 		}
 };

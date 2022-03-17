@@ -17,10 +17,11 @@ message S_Response {
 }
 
 message C_Request {
-    string name = 1;
-    int32 init_val = 2;
+    uint32 choose_area = 1;
+    string name = 2;
+    int32 init_val = 3;
 
-    Streaming client_data_collection = 3;
+    Streaming client_data_collection = 4;
 }
 
 service AddressBook {

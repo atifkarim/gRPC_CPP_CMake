@@ -14,22 +14,6 @@ int main(int argc, char* argv[])
 	std::string client_address = "localhost:50051";
 	std::cout << "Address of client: " << client_address << std::endl;
 
-	// ssl tsl try
-	std::string cert;
-	std::string key;
-	std::string root;
-
-	read ( "client.crt", cert );
-	read ( "client.key", key );
-	read ( "ca.crt", root );
-
-	grpc::SslCredentialsOptions opts =
-	{
-		root,
-		key,
-		cert
-	};
-
 	// Setup request
 	demo_grpc::C_Request query;
 	demo_grpc::S_Response result;
@@ -43,8 +27,17 @@ int main(int argc, char* argv[])
 	cin >> x;
 	query.set_init_val(x);
 
+	// ssl_tsl try from gRPC source code
+	constexpr char kCaCertPath[] = "/home/atif/grpc/src/core/tsi/test_creds/ca.pem";
+	grpc::SslCredentialsOptions ssl_opts;
+	ssl_opts.pem_root_certs = ReadFile(kCaCertPath);
+	grpc::ChannelArguments args;
+	args.SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, "foo.test.google.fr");
+
 	// Call
-	auto channel = grpc::CreateChannel(client_address, grpc::SslCredentials ( opts ));
+	// auto channel = grpc::CreateChannel(client_address, grpc::InsecureChannelCredentials());
+	auto channel = grpc::CreateCustomChannel(client_address, grpc::SslCredentials(ssl_opts), args);
+
 	std::unique_ptr<demo_grpc::AddressBook::Stub> stub = demo_grpc::AddressBook::NewStub(channel);
 	grpc::ClientContext context;
 	grpc::Status status = stub->GetAddress(&context, query, &result);

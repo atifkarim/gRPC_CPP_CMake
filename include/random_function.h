@@ -27,3 +27,19 @@ read ( const std::string& filename, std::string& data )
 
 	return;
 }
+
+#include <fstream>
+
+// helper function to use gRPC source code related to ssl tsl to read cert and key file
+std::string ReadFile(const std::string& src_path) {
+  std::ifstream src;
+  src.open(src_path, std::ifstream::in | std::ifstream::binary);
+
+  std::string contents;
+  src.seekg(0, std::ios::end);
+  contents.reserve(src.tellg());
+  src.seekg(0, std::ios::beg);
+  contents.assign((std::istreambuf_iterator<char>(src)),
+                  (std::istreambuf_iterator<char>()));
+  return contents;
+}

@@ -52,27 +52,17 @@ void RunServer()
 	std::string server_address = "localhost:50051";
 	std::cout << "Address of server: " << server_address << std::endl;
 
-	// ssl tsl try
-	std::string key;
-	std::string cert;
-	std::string root;
-
-	read ( "server.crt", cert );
-	read ( "server.key", key );
-	read ( "ca.crt", root );
-
-	grpc::SslServerCredentialsOptions::PemKeyCertPair keycert =
-	{
-		key,
-		cert
-	};
-
-	grpc::SslServerCredentialsOptions sslOps;
-	sslOps.pem_root_certs = root;
-	sslOps.pem_key_cert_pairs.push_back ( keycert );
+	// ssl_tsl try from gRPC source code
+	constexpr char kServerCertPath[] = "/home/atif/grpc/src/core/tsi/test_creds/server1.pem";
+	constexpr char kServerKeyPath[]  = "/home/atif/grpc/src/core/tsi/test_creds/server1.key";
+	constexpr char kCaCertPath[]     = "/home/atif/grpc/src/core/tsi/test_creds/ca.pem";
+	grpc::SslServerCredentialsOptions ssl_opts;
+	ssl_opts.pem_key_cert_pairs.push_back({ReadFile(kServerKeyPath), ReadFile(kServerCertPath)});
+	ssl_opts.pem_root_certs =ReadFile(kCaCertPath);
 
 	grpc::ServerBuilder builder;
-	builder.AddListeningPort(server_address, grpc::SslServerCredentials( sslOps ));
+	// builder.AddListeningPort(server_address, grpc::InsecureChannelCredentials());
+	builder.AddListeningPort(server_address, grpc::SslServerCredentials(ssl_opts));
 
 	AddressBookService my_service;
 	builder.RegisterService(&my_service);

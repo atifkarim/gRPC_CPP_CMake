@@ -4,9 +4,23 @@ package demo_grpc;
 
 import "myproto/address.proto";
 
+message S_Response {
+    string name     = 1;
+    string street   = 2;
+    string zip      = 3;
+    string city     = 4;
+    string country  = 5;
+
+    int32 double_init_val = 6;
+
+    Streaming server_data_collection = 7;
+}
+
 message C_Request {
     string name = 1;
     int32 init_val = 2;
+
+    Streaming client_data_collection = 3;
 }
 
 service AddressBook {

@@ -52,16 +52,18 @@ void RunServer()
 	std::cout << "Address of server: " << server_address << std::endl;
 
 	// ssl_tsl try from gRPC source code
+	/*
 	constexpr char kServerCertPath[] = "/home/atif/grpc/src/core/tsi/test_creds/server1.pem";
 	constexpr char kServerKeyPath[]  = "/home/atif/grpc/src/core/tsi/test_creds/server1.key";
 	constexpr char kCaCertPath[]     = "/home/atif/grpc/src/core/tsi/test_creds/ca.pem";
 	grpc::SslServerCredentialsOptions ssl_opts;
 	ssl_opts.pem_key_cert_pairs.push_back({ReadFile(kServerKeyPath), ReadFile(kServerCertPath)});
 	ssl_opts.pem_root_certs =ReadFile(kCaCertPath);
+	*/
 
 	grpc::ServerBuilder builder;
-	// builder.AddListeningPort(server_address, grpc::InsecureChannelCredentials());
-	builder.AddListeningPort(server_address, grpc::SslServerCredentials(ssl_opts));
+	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+	// builder.AddListeningPort(server_address, grpc::SslServerCredentials(ssl_opts));
 
 	AddressBookService my_service;
 	builder.RegisterService(&my_service);

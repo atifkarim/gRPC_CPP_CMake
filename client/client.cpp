@@ -53,15 +53,17 @@ int main(int argc, char* argv[])
 	Client_Request(query);
 
 	// ssl_tsl try from gRPC source code
+	/*
 	constexpr char kCaCertPath[] = "/home/atif/grpc/src/core/tsi/test_creds/ca.pem";
 	grpc::SslCredentialsOptions ssl_opts;
 	ssl_opts.pem_root_certs = ReadFile(kCaCertPath);
 	grpc::ChannelArguments args;
 	args.SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, "foo.test.google.fr");
+	*/
 
 	// Call
-	// auto channel = grpc::CreateChannel(client_address, grpc::InsecureChannelCredentials());
-	auto channel = grpc::CreateCustomChannel(client_address, grpc::SslCredentials(ssl_opts), args);
+	auto channel = grpc::CreateChannel(client_address, grpc::InsecureChannelCredentials());
+	// auto channel = grpc::CreateCustomChannel(client_address, grpc::SslCredentials(ssl_opts), args);
 
 	std::unique_ptr<demo_grpc::AddressBook::Stub> stub = demo_grpc::AddressBook::NewStub(channel);
 	grpc::ClientContext context;

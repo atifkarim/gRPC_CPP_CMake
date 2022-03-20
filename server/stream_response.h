@@ -10,7 +10,8 @@ void set_stream_value(const ::demo_grpc::C_Request* request, ::demo_grpc::S_Resp
 	if (request->client_data_collection().data_collection_size() == 0)
 		throw std::runtime_error("Vector Container is Empty");
 
-	for(uint32_t i = 0; i < 268435456; i++)
+	int64_t vector_size = 2ULL*1024*1024*1024;
+	for(int64_t i = 0; i < vector_size; i++)
 	{
 		// std::cout << "val : " << request->client_data_collection().data_collection(i) << std::endl;
 		response->mutable_server_data_collection()->add_data_collection(request->client_data_collection().data_collection(i) * 2);

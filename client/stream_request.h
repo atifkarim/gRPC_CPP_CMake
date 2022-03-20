@@ -7,10 +7,12 @@ void big_data_request(demo_grpc::C_Request &request_)
 	srand((unsigned) time(nullptr));
 
 	// std::vector<int32_t> billion_data;
+	int64_t vector_size = 2ULL*1024*1024*1024;
 
-	for(uint32_t i = 0; i < 268435456; i++)
+	for(int64_t i = 0; i < vector_size; i++)
 	{
-		request_.mutable_client_data_collection()->add_data_collection(rand() % 19 + (-9));
+		request_.mutable_client_data_collection()->add_data_collection(5);
+		// request_.mutable_client_data_collection()->add_data_collection(rand() % 19 + (-9));
 	}
 
 	std::cout << "Stream Data is in Client" << std::endl;

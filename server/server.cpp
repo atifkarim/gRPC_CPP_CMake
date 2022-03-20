@@ -1,10 +1,11 @@
-#include <myproto/address.pb.h>
+#include <myproto/big_data.pb.h>
 #include <myproto/addressbook.grpc.pb.h>
 
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/server_builder.h>
 
 #include "address_response.h"
+#include "stream_response.h"
 #include "random_function.h"
 
 #include <iostream>
@@ -31,6 +32,18 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 				try
 				{
 					Set_Check_Value(request, response);
+				}
+				catch(const std::exception& e)
+				{
+					std::cout << e.what() << std::endl;
+					return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+				}
+			break;
+
+			case 2:
+				try
+				{
+					set_stream_value(request, response);
 				}
 				catch(const std::exception& e)
 				{

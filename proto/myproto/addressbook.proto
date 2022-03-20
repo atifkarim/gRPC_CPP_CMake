@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package demo_grpc;
 
-import "myproto/address.proto";
+import "myproto/big_data.proto";
 
 message S_Response {
     string name     = 1;

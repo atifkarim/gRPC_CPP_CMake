@@ -4,4 +4,5 @@ package demo_grpc;
 
 message Streaming {
     repeated int32 data_collection = 1 [packed=true];
+    int32 index = 2;
 }

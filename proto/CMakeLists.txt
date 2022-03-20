@@ -6,7 +6,7 @@ find_package(Threads)
 # Protobuf/Grpc source files
 #
 set(PROTO_FILES
-    ${${PROJECT_NAME}_SOURCE_DIR}/proto/myproto/address.proto
+    ${${PROJECT_NAME}_SOURCE_DIR}/proto/myproto/big_data.proto
     ${${PROJECT_NAME}_SOURCE_DIR}/proto/myproto/addressbook.proto
 )
 

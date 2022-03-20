@@ -1,10 +1,11 @@
-#include <address.pb.h>
+#include <big_data.pb.h>
 #include <addressbook.grpc.pb.h>
 
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/create_channel.h>
 
 #include "address_request.h"
+#include "stream_request.h"
 #include "random_function.h"
 
 #include <iostream>
@@ -27,6 +28,7 @@ void Client_Request(demo_grpc::C_Request &request_)
 	{
 		case 0: address_request(request_); break;
 		case 1: check_value_request(request_); break;
+		case 2: big_data_request(request_); break;
 		default: throw std::runtime_error("No Service is added against this Wish"); break;
 	}
 }
@@ -38,6 +40,7 @@ void Server_Response(demo_grpc::C_Request &request_, const demo_grpc::S_Response
 	{
 		case 0: address_response(request_, response_); break;
 		case 1: check_value_response(request_, response_); break;
+		case 2: big_data_response(request_, response_); break;
 	}
 }
 

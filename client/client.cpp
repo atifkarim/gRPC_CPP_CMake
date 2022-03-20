@@ -82,6 +82,10 @@ int main(int argc, char* argv[])
 		{
 			std::cout << status.error_message() << std::endl;
 		}
+		else
+		{
+			std::cout << status.error_message() << std::endl;
+		}
 	}
 
 	return 0;

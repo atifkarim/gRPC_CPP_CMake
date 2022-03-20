@@ -75,8 +75,18 @@ void RunServer()
 	*/
 
 	grpc::ServerBuilder builder;
-	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+	// builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
 	// builder.AddListeningPort(server_address, grpc::SslServerCredentials(ssl_opts));
+
+	// follwoing for get and send max size message
+	// builder.SetMaxMessageSize(3ULL * 1024 * 1024 * 1024);
+
+	// builder.SetMaxReceiveMessageSize(3ULL * 1024 * 1024 * 1024);
+	// builder.SetMaxSendMessageSize(3ULL * 1024 * 1024 * 1024);
+
+	builder.SetMaxReceiveMessageSize(LONG_MAX);
+	builder.SetMaxSendMessageSize(LONG_MAX);
+	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
 
 	AddressBookService my_service;
 	builder.RegisterService(&my_service);

@@ -68,10 +68,16 @@ int main(int argc, char* argv[])
 	// auto channel = grpc::CreateChannel(client_address, grpc::InsecureChannelCredentials());
 
 	// following code to set maximum limit from client side
+
 	auto cargs = grpc::ChannelArguments();
-	cargs.SetMaxReceiveMessageSize(3ULL * 1024 * 1024 * 1024); // 1 GB
-	cargs.SetMaxSendMessageSize(3ULL * 1024 * 1024 * 1024);
+	// cargs.SetMaxReceiveMessageSize(3ULL * 1024 * 1024 * 1024); // 1 GB
+	// cargs.SetMaxSendMessageSize(3ULL * 1024 * 1024 * 1024);
+
+	// following found here:
+	cargs.SetMaxReceiveMessageSize(-1); // 1 GB
+	cargs.SetMaxSendMessageSize(-1);
 	auto channel = grpc::CreateCustomChannel(client_address, grpc::InsecureChannelCredentials(), cargs);
+
 
 	// following code is for gRPC ssl tsl code
 	// auto channel = grpc::CreateCustomChannel(client_address, grpc::SslCredentials(ssl_opts), args);

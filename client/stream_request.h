@@ -1,5 +1,15 @@
-// # include <vector>
 #include <ctime>
+
+/*
+How many integer in 1GB?
+Probable Answer:
+
+32 bit comprises 1 integer
+So, convert 1GB to bit and devide by 32
+1 GB = 1*1024*1024*1024*8 = 8589934592 bits
+so, total integer = (1*1024*1024*1024*8) / 32 = 268435456
+
+*/
 
 // This function prepare necessary parameter to send Client request to the Server
 void big_data_request(demo_grpc::C_Request &request_)
@@ -7,7 +17,9 @@ void big_data_request(demo_grpc::C_Request &request_)
 	srand((unsigned) time(nullptr));
 
 	// std::vector<int32_t> billion_data;
-	int64_t vector_size = 2ULL*1024*1024*1024;
+	// int64_t vector_size = 2ULL*1024*1024*1024;
+	int64_t vector_size = 1610612736;
+	// int64_t vector_size = 2684354560;
 
 	for(int64_t i = 0; i < vector_size; i++)
 	{

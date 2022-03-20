@@ -10,7 +10,9 @@ void set_stream_value(const ::demo_grpc::C_Request* request, ::demo_grpc::S_Resp
 	if (request->client_data_collection().data_collection_size() == 0)
 		throw std::runtime_error("Vector Container is Empty");
 
-	int64_t vector_size = 2ULL*1024*1024*1024;
+	// int64_t vector_size = 2ULL*1024*1024*1024;
+	int64_t vector_size = 1610612736;
+	// int64_t vector_size = 2684354560;
 	for(int64_t i = 0; i < vector_size; i++)
 	{
 		// std::cout << "val : " << request->client_data_collection().data_collection(i) << std::endl;

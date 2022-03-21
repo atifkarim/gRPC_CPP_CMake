@@ -27,5 +27,5 @@ message C_Request {
 service AddressBook {
     rpc GetAddress(C_Request) returns (S_Response) {}
 
-    rpc Stream_Large_Data(stream Large_Data) returns (stream Large_Data) {}
+    rpc Stream_Chunk_Service(stream Large_Data) returns (stream Large_Data) {}
 }

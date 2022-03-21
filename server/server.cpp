@@ -56,6 +56,12 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			std::cout << "Information of " << request->choose_area() << " is sent to Client" << std::endl;
 			return grpc::Status::OK;
 		}
+
+	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data, ::demo_grpc::Large_Data>* stream)
+	{
+		// stream->Large_Data;
+		return grpc::Status::OK;
+	}
 };
 
 void RunServer()

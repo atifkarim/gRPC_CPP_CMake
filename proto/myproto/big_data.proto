@@ -6,3 +6,8 @@ message Streaming {
     repeated int32 data_collection = 1 [packed=true];
     int32 index = 2;
 }
+
+message Large_Data {
+    repeated int32 large_data_collection = 1 [packed=true];
+    int32 data_chunk_number = 2;
+}

@@ -57,9 +57,18 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			return grpc::Status::OK;
 		}
 
-	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data, ::demo_grpc::Large_Data>* stream)
+	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
 	{
-		// stream->Large_Data;
+		std::cout << "Streaming Data from Server will be done here" << std::endl;
+
+		demo_grpc::Large_Data_Request request;
+		demo_grpc::Large_Data_Response response;
+		while (stream->Read(&request))
+		{
+			response.set_response_size(5);
+			// stream->Write(response);
+		}
+		stream->Write(response);
 		return grpc::Status::OK;
 	}
 };

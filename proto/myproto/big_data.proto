@@ -7,7 +7,12 @@ message Streaming {
     int32 index = 2;
 }
 
-message Large_Data {
-    repeated int32 large_data_collection = 1 [packed=true];
-    int32 data_chunk_number = 2;
+message Large_Data_Request {
+    repeated int32 large_data_collection_request = 1 [packed=true];
+    int32 request_size = 2;
+}
+
+message Large_Data_Response {
+    repeated int32 large_data_collection_response = 1 [packed=true];
+    int32 response_size = 2;
 }

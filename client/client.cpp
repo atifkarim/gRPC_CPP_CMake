@@ -46,8 +46,8 @@ void Server_Response(demo_grpc::C_Request &request_, const demo_grpc::S_Response
 }
 
 // following function make large vector and then chunk to send via stream from client to server
-void Stream_Data_Chunk_Request(demo_grpc::Large_Data &request_,
-                               demo_grpc::Large_Data &response_,
+void Stream_Data_Chunk_Request(demo_grpc::Large_Data_Request &request_,
+                               demo_grpc::Large_Data_Response &response_,
                                uint64_t preferred_chunk_size_in_kibyte)
 {
 	std::vector<int32_t> large_vector;
@@ -65,31 +65,38 @@ void Stream_Data_Chunk_Request(demo_grpc::Large_Data &request_,
 	std::cout << "Client : total_chunk: " << total_chunk << std::endl;
 	std::cout << "Client : Each chunk holds: " << preferred_chunk_size_in_kibyte_holds_integer_num << " number of integer" << std::endl;
 
+	std::string ip_address = "localhost:50051";
+	auto channel = grpc::CreateChannel(ip_address, grpc::InsecureChannelCredentials());
+	std::unique_ptr<demo_grpc::AddressBook::Stub> stub = demo_grpc::AddressBook::NewStub(channel);
+	grpc::ClientContext context;
+	std::shared_ptr<::grpc::ClientReaderWriter< ::demo_grpc::Large_Data_Request, ::demo_grpc::Large_Data_Response> > stream(stub->Stream_Chunk_Service(&context));
+	// grpc::Status status = stub->Stream_Chunk_Service(&context);
+
 	int32_t temp_count = 0;
 	while(total_chunk > 0)
 	{
 		for (int64_t i = temp_count * preferred_chunk_size_in_kibyte_holds_integer_num; i < preferred_chunk_size_in_kibyte_holds_integer_num + temp_count * preferred_chunk_size_in_kibyte_holds_integer_num; i++)
 		{
-			request_.add_large_data_collection(large_vector[i]);
+			request_.add_large_data_collection_request(large_vector[i]);
 		}
 		temp_count++;
 		total_chunk--;
 
-		std::string ip_address = "localhost:50051";
-		auto channel = grpc::CreateChannel(ip_address, grpc::InsecureChannelCredentials());
-		std::unique_ptr<demo_grpc::AddressBook::Stub> stub = demo_grpc::AddressBook::NewStub(channel);
+		stream->Write(request_);
 
-		grpc::ClientContext context;
-		std::shared_ptr<::grpc::ClientReaderWriter< ::demo_grpc::Large_Data, ::demo_grpc::Large_Data> > stream(stub->Stream_Chunk_Service(&context));
-		// grpc::Status status = stub->Stream_Chunk_Service(&context);
-
-		request_.clear_large_data_collection();
+		request_.clear_large_data_collection_request();
 	}
 
-	// grpc::Status status = stream->Finish();
+	stream->WritesDone();
 
-	std::cout << "Client make a stream data of size " << request_.large_data_collection_size() << std::endl;
+	std::cout << "Client make a stream data of size " << request_.large_data_collection_request_size() << std::endl;
 
+	grpc::Status status = stream->Finish();
+
+	if (status.ok())
+		std::cout << "Server is GOOD !!! and sent response_size: " << response_.response_size() << " which is dummy" <<std::endl;
+	else
+		std::cout << "Server is in trouble" << std::endl;
 }
 
 int main(int argc, char* argv[])
@@ -103,8 +110,8 @@ int main(int argc, char* argv[])
 
 	Client_Request(query);
 
-	demo_grpc::Large_Data stream_chunk_request_;
-	demo_grpc::Large_Data stream_chunk_response_;
+	demo_grpc::Large_Data_Request stream_chunk_request_;
+	demo_grpc::Large_Data_Response stream_chunk_response_;
 
 	uint64_t preferred_chunk_size_in_kibyte = 64;
 	Stream_Data_Chunk_Request(stream_chunk_request_, stream_chunk_response_, preferred_chunk_size_in_kibyte);

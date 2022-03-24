@@ -77,19 +77,24 @@ void Stream_Data_Chunk_Request(demo_grpc::Large_Data_Request &request_,
 	{
 		for (int64_t i = temp_count * preferred_chunk_size_in_kibyte_holds_integer_num; i < preferred_chunk_size_in_kibyte_holds_integer_num + temp_count * preferred_chunk_size_in_kibyte_holds_integer_num; i++)
 		{
-			request_.add_large_data_collection_request(large_vector[i]);
+			request_.add_chunk_data_request(large_vector[i]);
 		}
 		temp_count++;
 		total_chunk--;
 
 		stream->Write(request_);
 
-		request_.clear_large_data_collection_request();
+		request_.clear_chunk_data_request();
 	}
 
 	stream->WritesDone();
 
-	std::cout << "Client make a stream data of size " << request_.large_data_collection_request_size() << std::endl;
+	while (stream->Read(&response_))
+	{
+		int a = 3;
+	}
+
+	std::cout << "Client make a stream data of size " << request_.chunk_data_request_size() << std::endl;
 
 	grpc::Status status = stream->Finish();
 

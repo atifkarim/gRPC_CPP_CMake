@@ -9,6 +9,7 @@
 #include "random_function.h"
 
 #include <iostream>
+#include <numeric>
 
 class AddressBookService final : public demo_grpc::AddressBook::Service {
 	public:
@@ -57,18 +58,51 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			return grpc::Status::OK;
 		}
 
-	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
+	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context,
+	                                            ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
 	{
-		std::cout << "Streaming Data from Server will be done here" << std::endl;
+		std::cout << "Server Side Stream Service has executed" << std::endl;
+
+		std::vector<int32_t> server_dummy_data_set;
 
 		demo_grpc::Large_Data_Request request;
 		demo_grpc::Large_Data_Response response;
-		while (stream->Read(&request))
-		{
-			response.set_response_size(5);
-			// stream->Write(response);
+
+		while (stream->Read(&request)){
+			for(int64_t i = 0; i < request.chunk_data_length(); i++){
+				server_dummy_data_set.push_back(request.chunk_data_client_request(i));
+			}
 		}
-		stream->Write(response);
+
+		if(server_dummy_data_set.size() == request.client_data_stream_size()){
+			std::cout << std::endl
+			          << "Steam Data has transmitted rom Client to Server. All are stored in server_dummy_data_set" << std::endl
+			          << "server_dummy_data_set size              : " << server_dummy_data_set.size() << std::endl
+			          << "Sum of sample of  server_dummy_data_set : " << std::accumulate(server_dummy_data_set.begin(), server_dummy_data_set.end(), 0ULL) << std::endl;
+		}
+
+		std::cout << std::endl
+		          << "Information from Client" << std::endl
+		          << "-----------------------------------" << std::endl
+		          << "Data Sample carried by chunk  : " << request.client_data_stream_size() << std::endl
+		          << "Required chunks               : " << request.required_chunk() << std::endl
+		          << "Data Sample for every chunk   : " << request.chunk_data_length() << std::endl;
+
+		int64_t track_index = 0; // Tracks the current index of the server_dummy_data_set
+
+		// SErver starts streaming the data chunk by chunk to the client
+		for (int64_t i = 0; i < request.required_chunk(); i++){
+			for(int64_t j = track_index * request.chunk_data_length(); j < request.chunk_data_length() + track_index * request.chunk_data_length(); j++){
+				response.add_chunk_data_server_response(server_dummy_data_set[j] * 2);
+			}
+			track_index++;
+			stream->Write(response);
+
+			// message filed will be cleared after passing one chunk. It provides a fresh repeated field in the next iteration to pass a new chunk
+			response.clear_chunk_data_server_response();
+		}
+
+		std::cout << "Streaming Job is done from Server Side" << std::endl;
 		return grpc::Status::OK;
 	}
 };

@@ -9,3 +9,4 @@
 
 - A [source in C#](https://blog.noser.com/grpc-tutorial-teil-2-streaming-mit-grpc/) for stream message
 - A finding [regarding gRPC stream](https://stackoverflow.com/questions/67784384/c-grpc-clientasyncreaderwriter-how-to-check-if-data-is-available-for-read)
+- [Message length setting in gRPC](https://nanxiao.me/en/message-length-setting-in-grpc/)

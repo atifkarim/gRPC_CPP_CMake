@@ -7,12 +7,16 @@ message Streaming {
     int32 index = 2;
 }
 
+// Follwoing messages will be used for Bi-directional streaming (chunk data)
 message Large_Data_Request {
-    repeated int32 chunk_data_request = 1 [packed=true];
-    int32 request_size = 2;
+    repeated int32 chunk_data_client_request = 1 [packed=true]; // Data container where chunk data will be stored to pass as stream from client to server
+    uint32 client_data_stream_size = 2; // This will be the size of the whole data stream from client to server (Eg: Size of a vector. vec.size())
+    uint32 chunk_data_length = 3; // Number of data samples in each chunk
+    uint32 required_chunk = 4; // Number of chunk to complete the Streaming
+    string name = 5; // Name name of the data stream
 }
 
 message Large_Data_Response {
-    repeated int32 large_data_collection_response = 1 [packed=true];
-    int32 response_size = 2;
+    repeated int32 chunk_data_server_response = 1 [packed=true]; // Data container to be used to do stream operation from server to client
+    int32 server_data_stream_size = 2; // This will be the size of the whole data stream from server to client (Eg: Size of a vector. vec.size())
 }

@@ -22,6 +22,8 @@ message C_Request {
     int32 init_val = 3;
 
     Streaming client_data_collection = 4;
+
+    string area_field = 5;
 }
 
 service AddressBook {

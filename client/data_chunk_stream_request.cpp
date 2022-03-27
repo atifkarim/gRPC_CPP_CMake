@@ -103,10 +103,10 @@ void grpc_client::data_chunk_stream_request()
 	if (status.ok()){
 		std::cout << request_.name() << " is transmitted from Server" << std::endl;
 		std::cout << std::endl
-	              << "Server has responsed OK and stream/large data from server is stored in a vector in Client side" << std::endl
-	              << "dummy_final_data_set size              : " << dummy_final_data_set.size() << std::endl
-	              << "Sum of sample of dummy_final_data_set  : " << std::accumulate(dummy_final_data_set.begin(), dummy_final_data_set.end(), 0ULL) << std::endl
-	              << std::endl;
+		          << "Server has responsed OK and stream/large data from server is stored in a vector in Client side" << std::endl
+		          << "dummy_final_data_set size              : " << dummy_final_data_set.size() << std::endl
+		          << "Sum of sample of dummy_final_data_set  : " << std::accumulate(dummy_final_data_set.begin(), dummy_final_data_set.end(), 0ULL) << std::endl
+		          << std::endl;
 	}
 
 	else

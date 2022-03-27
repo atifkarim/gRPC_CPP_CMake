@@ -27,8 +27,8 @@ set_target_properties(${MAIN_TARGET_NAME}_server PROPERTIES RUNTIME_OUTPUT_DIREC
 
 # Shared library for client
 add_library(${MAIN_TARGET_NAME}shared_lib_client ${${PROJECT_NAME}_SOURCE_DIR}/client/address_request.cpp
-                                           ${${PROJECT_NAME}_SOURCE_DIR}/client/value_request.cpp
-                                           ${${PROJECT_NAME}_SOURCE_DIR}/client/data_chunk_stream_request.cpp)
+                                                 ${${PROJECT_NAME}_SOURCE_DIR}/client/value_request.cpp
+                                                 ${${PROJECT_NAME}_SOURCE_DIR}/client/data_chunk_stream_request.cpp)
 
 # Required directory for the shared library (generated proto headers will be added here too)
 target_include_directories(${MAIN_TARGET_NAME}shared_lib_client PUBLIC ${CMAKE_BINARY_DIR}/proto/myproto

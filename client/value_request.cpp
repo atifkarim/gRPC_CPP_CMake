@@ -11,7 +11,7 @@ void grpc_client::check_value_request()
 
 	request_.set_init_val(value_);
 	request_.set_area_field(detected_area_name);
-    request_.set_choose_area(button);
+	request_.set_choose_area(button);
 
 	grpc::ClientContext context;
 	grpc::Status status = stub->GetAddress(&context, request_, &response_);

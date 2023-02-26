@@ -93,7 +93,8 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 
 		int64_t track_index = 0; // Tracks the current index of the server_dummy_data_set
 
-		// SErver starts streaming the data chunk by chunk to the client
+		// Server starts streaming the data chunk by chunk to the client. Here, server is doing a dummy operation on clients data.
+		// Here, it multiplies by 2
 		for (int64_t i = 0; i < request.required_chunk(); i++){
 			for(int64_t j = track_index * request.chunk_data_length(); j < request.chunk_data_length() + track_index * request.chunk_data_length(); j++){
 				response.add_chunk_data_server_response(server_dummy_data_set[j] * 2);

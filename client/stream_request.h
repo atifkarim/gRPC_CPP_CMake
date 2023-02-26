@@ -5,7 +5,7 @@ How many integer in 1GB?
 Probable Answer:
 
 32 bit comprises 1 integer
-So, convert 1GB to bit and devide by 32
+So, convert 1GB to bit and divide by 32
 1 GB = 1*1024*1024*1024*8 = 8589934592 bits
 so, total integer = (1*1024*1024*1024*8) / 32 = 268435456
 

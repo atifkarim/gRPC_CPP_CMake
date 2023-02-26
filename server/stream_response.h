@@ -3,7 +3,7 @@
 // This function prepare firmware to initialize and set value for corresponding protobuf message
 void set_stream_value(const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
 {
-	std::cout << "Stream Data is in Server" << std::endl;
+	std::cout << "**********############################### Stream Data is in Server" << std::endl;
 	std::cout << "Client has sent : " << request->client_data_collection().index() << std::endl;
 	response->mutable_server_data_collection()->set_index(78);
 

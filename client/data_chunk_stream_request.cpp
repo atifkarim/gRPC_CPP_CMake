@@ -36,14 +36,14 @@ void grpc_client::data_chunk_stream_request()
 	}
 
 	std::vector<int32_t> dummy_data_set;
-	std::cout << "Client is creation dummy data set" << std::endl;
+	std::cout << "Client is creating dummy data set" << std::endl;
 	for(int64_t i = 0; i < 1024 * 1024; i++)
 	{
 		dummy_data_set.push_back(2);
 	}
 
-	std::cout << "Informtaion of Dummy Data Set" << std::endl
-	          << "************************************" << std::endl
+	std::cout << "Information of Dummy Data Set" << std::endl
+	          << "*****************************" << std::endl
 	          << "Data Sample                   : " << dummy_data_set.size() << std::endl
 	          << "Sum of Data Sample            : " << std::accumulate(dummy_data_set.begin(), dummy_data_set.end(), 0ULL) << std::endl
 	          << "Size of Dummy Data Set(GB)    : " << static_cast<float>(dummy_data_set.size() * 32) / (1024*1024*1024) << std::endl;
@@ -79,7 +79,7 @@ void grpc_client::data_chunk_stream_request()
 
 		stream->Write(request_);
 
-		// message filed will be cleared after passing one chunk. It provides a fresh repeated field in the next iteration to pass a new chunk
+		// message field will be cleared after passing one chunk. It provides a fresh repeated field in the next iteration to pass a new chunk
 		request_.clear_chunk_data_client_request();
 	}
 
@@ -103,7 +103,7 @@ void grpc_client::data_chunk_stream_request()
 	if (status.ok()){
 		std::cout << request_.name() << " is transmitted from Server" << std::endl;
 		std::cout << std::endl
-		          << "Server has responsed OK and stream/large data from server is stored in a vector in Client side" << std::endl
+		          << "Server has responded OK and stream/large data from server is stored in a vector in Client side" << std::endl
 		          << "dummy_final_data_set size              : " << dummy_final_data_set.size() << std::endl
 		          << "Sum of sample of dummy_final_data_set  : " << std::accumulate(dummy_final_data_set.begin(), dummy_final_data_set.end(), 0ULL) << std::endl
 		          << std::endl;

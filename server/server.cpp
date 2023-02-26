@@ -20,6 +20,7 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			case 0:
 				try
 				{
+					std::cout << "****************** HEY I AM HERE , CASE " << request->choose_area() <<" !!!!!  ******************" << std::endl;
 					Set_Value_Address(request, response);
 				}
 				catch(const std::exception& e)
@@ -32,6 +33,7 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			case 1:
 				try
 				{
+					std::cout << "****************** HEY I AM HERE , CASE " << request->choose_area() <<" !!!!!  ******************" << std::endl;
 					Set_Check_Value(request, response);
 				}
 				catch(const std::exception& e)
@@ -44,6 +46,7 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			case 2:
 				try
 				{
+					std::cout << "****************** HEY I AM HERE , CASE " << request->choose_area() <<" !!!!!  ******************" << std::endl;
 					set_stream_value(request, response);
 				}
 				catch(const std::exception& e)

@@ -11,9 +11,12 @@ void grpc_client::get_chunk_number(uint64_t data_size,
                                    uint64_t &sample,
                                    uint32_t &total_chunk)
 {
-	uint64_t data_size_kb = (32ULL * data_size) / 1024;
-	sample = (data_size * chunk_size) / data_size_kb;
+	// Each integer size is 4 Byte. That's why N integer size will be N * 4 bit
+	// To convert this into KB we have to divide the prior result with 1024. Eg: (vector.size() * 4) / 1024
+	uint64_t data_size_kb = (4ULL * data_size) / 1024;
 
+	// TODO Still this calculation works only if the dataset or vector size is divided by 1024 and the quotient is ZERO
+	// Next step will be, if the quotient is not ZERO that means some values will be missing and those missing values will be counted here
 	float total_chunk_intermediate = static_cast<float>(data_size) / sample;
 	total_chunk = std::ceil(total_chunk_intermediate);
 }
@@ -24,8 +27,12 @@ void grpc_client::data_chunk_stream_request()
 	demo_grpc::Large_Data_Request request_;
 	demo_grpc::Large_Data_Response response_;
 
+	// This chunk size will be provided by the user. It will not be greater than 4 MB and will be provided in KB unit.
+	// Eg: If you want to provide a chunk size of 3 MB you have to provide 3072 (3MB = 3 * 1024 KB)
+	// Also, this value will be a multiple of 64. That means at least a chunk size should be provided which can carry
+	// 64 KB data
 	uint64_t chunk_size;
-	std::cout << std:: endl << "Chunk size in KiloByte: ";
+	std::cout << std:: endl << "Provide chunk size (KB). Not more than 4 MB. Will be multiple of 64: ";
 	std::cin >> chunk_size;
 
 	if (static_cast<float>(chunk_size) / 1024 > 4){
@@ -48,8 +55,15 @@ void grpc_client::data_chunk_stream_request()
 	          << "Sum of Data Sample            : " << std::accumulate(dummy_data_set.begin(), dummy_data_set.end(), 0ULL) << std::endl
 	          << "Size of Dummy Data Set(GB)    : " << static_cast<float>(dummy_data_set.size() * 32) / (1024*1024*1024) << std::endl;
 
-	uint64_t sample = 0;
+	// Number of data in each chunk. Each integer is 4 byte. If chunk size is 64 KB that means "sample" will be number of
+	// Integers resides in this each chunk size.
+	// Convert this 64 KB to byte = 64 * 1024 Byte.
+	// 4 byte is taken by 1 integer, so, 64 * 1024 bytes is taken by (64*1024)/4 integer
+	uint64_t sample = (chunk_size * 1024)/4;
+
+	// Number of chunk to transfer whole data set (here, dummy_data_set)
 	uint32_t total_chunk = 0;
+
 	get_chunk_number(dummy_data_set.size(), chunk_size, sample, total_chunk);
 
 	std::cout << std::endl
@@ -96,17 +110,17 @@ void grpc_client::data_chunk_stream_request()
 		}
 	}
 
-	std::cout << "dummy_final_data_set size " << request_.chunk_data_client_request_size() << std::endl;
+	std::cout << "dummy_final_data_set size " << dummy_final_data_set.size() << std::endl;
 
 	grpc::Status status = stream->Finish();
 
 	if (status.ok()){
-		std::cout << request_.name() << " is transmitted from Server" << std::endl;
-		std::cout << std::endl
-		          << "Server has responded OK and stream/large data from server is stored in a vector in Client side" << std::endl
-		          << "dummy_final_data_set size              : " << dummy_final_data_set.size() << std::endl
-		          << "Sum of sample of dummy_final_data_set  : " << std::accumulate(dummy_final_data_set.begin(), dummy_final_data_set.end(), 0ULL) << std::endl
-		          << std::endl;
+		std::cout << std::endl;
+		std::cout << request_.name() << " transmission from Server is Successful" << std::endl
+		<< "Server has responded OK and stream/large data from server is stored in a vector in Client side" << std::endl
+		<< "dummy_final_data_set size              : " << dummy_final_data_set.size() << std::endl
+		<< "Sum of sample of dummy_final_data_set  : " << std::accumulate(dummy_final_data_set.begin(), dummy_final_data_set.end(), 0ULL) << std::endl
+		<< std::endl;
 	}
 
 	else

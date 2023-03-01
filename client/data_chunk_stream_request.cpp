@@ -55,9 +55,9 @@ void grpc_client::data_chunk_stream_request()
 		dummy_data_set.push_back(2);
 	}
 
-	std::cout << "***************" << std::endl
-	          << "Client platform" << std::endl
-	          << "***************" << std::endl
+	std::cout << "******" << std::endl
+	          << "Client" << std::endl
+	          << "******" << std::endl
 	          << "Dummy data set size                       : " << dummy_data_set.size() << std::endl
 	          << "Sum of the content of dummy data set      : " << std::accumulate(dummy_data_set.begin(), dummy_data_set.end(), 0ULL) << std::endl
 	          << "Size of dummy data set's container(GB)    : " << static_cast<float>(dummy_data_set.size() * 32) / (1024*1024*1024) << std::endl;
@@ -90,12 +90,10 @@ void grpc_client::data_chunk_stream_request()
 	{
 		for (int64_t i = temp_count * sample; i < sample + temp_count * sample; i++)
 		{
-			if (i >= dummy_data_set.size())
+			// This condition checks the iteration number with the vector data size of the client
+			// // if client data size has reached then writing will be stopped
+			if (i < dummy_data_set.size())
 			{
-				request_.add_chunk_data_client_request(0);
-			}
-			else{
-				// std::cout << "passing something\n";
 				request_.add_chunk_data_client_request(dummy_data_set[i]);
 			}
 		}
@@ -113,22 +111,29 @@ void grpc_client::data_chunk_stream_request()
 	// Reading chunk response from server
 	std::vector<int32_t> dummy_final_data_set;
 
+	// This variable checks data size of client during read back from server
+	uint32_t client_track_data_size_before_reading = 0;
+
 	while (stream->Read(&response_))
 	{
 		for(int64_t i = 0; i < request_.chunk_data_length(); i++)
 		{
-			if (i < dummy_data_set.size())
+			if (client_track_data_size_before_reading < dummy_data_set.size())
 			{
 				dummy_final_data_set.push_back(response_.chunk_data_server_response(i));
+				client_track_data_size_before_reading++;
 			}
 		}
 	}
 
-	std::cout << "dummy_final_data_set size " << dummy_final_data_set.size() << std::endl;
+
 
 	if (dummy_final_data_set.size() == response_.server_data_stream_size() | dummy_final_data_set.size() < response_.server_data_stream_size())
 	{
+		std::cout << std::endl;
+		std::cout << "*************************************" << std::endl;
 		std::cout << "Server successfully has sent all data" << std::endl;
+		std::cout << "*************************************" << std::endl;
 	}
 
 	grpc::Status status = stream->Finish();

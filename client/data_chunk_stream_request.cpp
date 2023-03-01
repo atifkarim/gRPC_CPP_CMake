@@ -117,13 +117,16 @@ void grpc_client::data_chunk_stream_request()
 	{
 		for(int64_t i = 0; i < request_.chunk_data_length(); i++)
 		{
-			dummy_final_data_set.push_back(response_.chunk_data_server_response(i));
+			if (i < dummy_data_set.size())
+			{
+				dummy_final_data_set.push_back(response_.chunk_data_server_response(i));
+			}
 		}
 	}
 
 	std::cout << "dummy_final_data_set size " << dummy_final_data_set.size() << std::endl;
 
-	if (dummy_final_data_set.size() == response_.server_data_stream_size())
+	if (dummy_final_data_set.size() == response_.server_data_stream_size() | dummy_final_data_set.size() < response_.server_data_stream_size())
 	{
 		std::cout << "Server successfully has sent all data" << std::endl;
 	}

@@ -42,35 +42,39 @@ void grpc_client::data_chunk_stream_request()
 		throw std::runtime_error("Please provide chunk size in multiple of 64 otherwise Number of chunk will be fractional");
 	}
 
+	// This vector is the container to hold dummy data created in client side
 	std::vector<int32_t> dummy_data_set;
-	std::cout << "Client is creating dummy data set" << std::endl;
-	for(int64_t i = 0; i < 1024 * 1024; i++)
+
+	// This is the size of the vector which will be chose by customer
+	uint32_t vector_size;
+
+	std::cout << "Dummy data will be create in client side. Please provide a size of vector: ";
+	std::cin >> vector_size;
+	for(int64_t i = 0; i < vector_size; i++)
 	{
 		dummy_data_set.push_back(2);
 	}
 
-	std::cout << "Information of Dummy Data Set" << std::endl
-	          << "*****************************" << std::endl
-	          << "Data Sample                   : " << dummy_data_set.size() << std::endl
-	          << "Sum of Data Sample            : " << std::accumulate(dummy_data_set.begin(), dummy_data_set.end(), 0ULL) << std::endl
-	          << "Size of Dummy Data Set(GB)    : " << static_cast<float>(dummy_data_set.size() * 32) / (1024*1024*1024) << std::endl;
+	std::cout << "***************" << std::endl
+	          << "Client platform" << std::endl
+	          << "***************" << std::endl
+	          << "Dummy data set size                       : " << dummy_data_set.size() << std::endl
+	          << "Sum of the content of dummy data set      : " << std::accumulate(dummy_data_set.begin(), dummy_data_set.end(), 0ULL) << std::endl
+	          << "Size of dummy data set's container(GB)    : " << static_cast<float>(dummy_data_set.size() * 32) / (1024*1024*1024) << std::endl;
 
 	// Number of data in each chunk. Each integer is 4 byte. If chunk size is 64 KB that means "sample" will be number of
 	// Integers resides in this each chunk size.
 	// Convert this 64 KB to byte = 64 * 1024 Byte.
 	// 4 byte is taken by 1 integer, so, 64 * 1024 bytes is taken by (64*1024)/4 integer
 	uint64_t sample = (chunk_size * 1024)/4;
+	std::cout << "Number of data in each chunk : " << sample << std::endl;
 
 	// Number of chunk to transfer whole data set (here, dummy_data_set)
 	uint32_t total_chunk = 0;
 
 	get_chunk_number(dummy_data_set.size(), chunk_size, sample, total_chunk);
 
-	std::cout << std::endl
-	          << "Client to Server" << std::endl
-	          << "----------------" << std::endl
-	          << "Total Chunk                 : " << total_chunk << std::endl
-	          << "Sample in each chunk   : " << sample << std::endl;
+	std::cout << "Number of Total chunk: " << total_chunk << std::endl;
 
 	// Proto Buffer message is preparing to pass to Server
 	request_.set_chunk_data_length(sample);
@@ -86,7 +90,14 @@ void grpc_client::data_chunk_stream_request()
 	{
 		for (int64_t i = temp_count * sample; i < sample + temp_count * sample; i++)
 		{
-			request_.add_chunk_data_client_request(dummy_data_set[i]);
+			if (i >= dummy_data_set.size())
+			{
+				request_.add_chunk_data_client_request(0);
+			}
+			else{
+				// std::cout << "passing something\n";
+				request_.add_chunk_data_client_request(dummy_data_set[i]);
+			}
 		}
 		temp_count++;
 		total_chunk--;
@@ -112,15 +123,20 @@ void grpc_client::data_chunk_stream_request()
 
 	std::cout << "dummy_final_data_set size " << dummy_final_data_set.size() << std::endl;
 
+	if (dummy_final_data_set.size() == response_.server_data_stream_size())
+	{
+		std::cout << "Server successfully has sent all data" << std::endl;
+	}
+
 	grpc::Status status = stream->Finish();
 
 	if (status.ok()){
 		std::cout << std::endl;
 		std::cout << request_.name() << " transmission from Server is Successful" << std::endl
-		<< "Server has responded OK and stream/large data from server is stored in a vector in Client side" << std::endl
-		<< "dummy_final_data_set size              : " << dummy_final_data_set.size() << std::endl
-		<< "Sum of sample of dummy_final_data_set  : " << std::accumulate(dummy_final_data_set.begin(), dummy_final_data_set.end(), 0ULL) << std::endl
-		<< std::endl;
+		          << "Server has responded OK and stream/large data from server is stored in a vector in Client side" << std::endl
+		          << "dummy_final_data_set size              : " << dummy_final_data_set.size() << std::endl
+		          << "Sum of sample of dummy_final_data_set  : " << std::accumulate(dummy_final_data_set.begin(), dummy_final_data_set.end(), 0ULL) << std::endl
+		          << std::endl;
 	}
 
 	else

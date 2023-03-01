@@ -93,19 +93,13 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 		std::cout << "server_dummy_data_set.size(): " << server_dummy_data_set.size() << std::endl;
 		std::cout << "Sum of server_dummy_data_set : " << std::accumulate(server_dummy_data_set.begin(), server_dummy_data_set.end(), 0ULL) << std::endl;
 
-		if(server_dummy_data_set.size() > request.client_data_stream_size())
-		{
-			std::cout << "Prepared data in server is larger than data size transferred by client" << std::endl;
-		}
-
 		if(server_dummy_data_set.size() == request.client_data_stream_size())
 		{
 			std::cout << "Prepared data in server is identical to the data size transferred by client" << std::endl;
 		}
-
-		if(server_dummy_data_set.size() < request.client_data_stream_size())
+		else
 		{
-			throw std::runtime_error("Caution !!! Server cannot read all data from client");
+			throw std::runtime_error("Caution !!! Data sample is mismatched");
 		}
 
 		// set proto message for server side

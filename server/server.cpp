@@ -86,6 +86,9 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 					server_dummy_data_set.push_back(request.chunk_data_client_request(i));
 					server_track_client_data_size_before_reading++;
 				}
+				else{
+				break;
+			}
 			}
 		}
 		std::cout << std::endl;
@@ -128,6 +131,9 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 					response.add_chunk_data_server_response(server_dummy_data_set[j] * 2);
 					server_track_client_data_size_before_writing++;
 				}
+				else{
+				break;
+			}
 			}
 			track_index++;
 			stream->Write(response);

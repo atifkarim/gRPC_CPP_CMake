@@ -90,13 +90,19 @@ void grpc_client::data_chunk_stream_request()
 	{
 		for (int64_t i = temp_count * sample; i < sample + temp_count * sample; i++)
 		{
+			std::cout << i << " ";
 			// This condition checks the iteration number with the vector data size of the client
 			// // if client data size has reached then writing will be stopped
 			if (i < dummy_data_set.size())
 			{
 				request_.add_chunk_data_client_request(dummy_data_set[i]);
+				// std::cout << "print for loop\n";
+			}
+			else{
+				break;
 			}
 		}
+		// std::cout << "print while loop\n";
 		temp_count++;
 		total_chunk--;
 
@@ -122,6 +128,9 @@ void grpc_client::data_chunk_stream_request()
 			{
 				dummy_final_data_set.push_back(response_.chunk_data_server_response(i));
 				client_track_data_size_before_reading++;
+			}
+			else{
+				break;
 			}
 		}
 	}

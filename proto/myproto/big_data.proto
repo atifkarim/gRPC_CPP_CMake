@@ -1,3 +1,5 @@
+// Proto file to send large amount of data using stream
+
 syntax = "proto3";
 
 package demo_grpc;

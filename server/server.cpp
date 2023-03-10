@@ -1,5 +1,6 @@
 #include <myproto/big_data.pb.h>
 #include <myproto/addressbook.grpc.pb.h>
+#include <myproto/collection.grpc.pb.h>
 
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/server_builder.h>

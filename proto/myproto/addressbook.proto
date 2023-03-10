@@ -1,3 +1,5 @@
+// Initial proto file of this project
+
 syntax = "proto3";
 
 package demo_grpc;
@@ -24,10 +26,4 @@ message C_Request {
     Streaming client_data_collection = 4;
 
     string area_field = 5;
-}
-
-service AddressBook {
-    rpc GetAddress(C_Request) returns (S_Response) {}
-
-    rpc Stream_Chunk_Service(stream Large_Data_Request) returns (stream Large_Data_Response) {}
 }

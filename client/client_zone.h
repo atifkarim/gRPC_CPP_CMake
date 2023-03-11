@@ -14,14 +14,14 @@ class grpc_client
 {
 	public:
 		grpc_client(std::shared_ptr<grpc::Channel> channel, unsigned int button_)
-		            : stub(demo_grpc::AddressBook::NewStub(channel)), detected_area_name(area_mame(button_)) , button(button_) {}
+		            : stub(demo_grpc::Demo_gRPC_Service::NewStub(channel)), detected_area_name(area_mame(button_)) , button(button_) {}
 
 		void address_request();
 		void check_value_request();
 		void data_chunk_stream_request();
 
 	private:
-		std::unique_ptr<demo_grpc::AddressBook::Stub> stub;
+		std::unique_ptr<demo_grpc::Demo_gRPC_Service::Stub> stub;
 		std::string area_mame(unsigned int area_index){
 		    std::string area_list[] = {"Address_Book",
 		                               "Check Value",

@@ -12,7 +12,7 @@
 #include <iostream>
 #include <numeric>
 
-class AddressBookService final : public demo_grpc::AddressBook::Service {
+class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 	public:
 		virtual ::grpc::Status GetAddress(::grpc::ServerContext* context, const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
 		{

@@ -1,5 +1,8 @@
-#include <myproto/big_data.pb.h>
-#include <myproto/addressbook.grpc.pb.h>
+#include <iostream>
+
+#include <big_data.pb.h>
+#include <addressbook.grpc.pb.h>
+#include <collection.grpc.pb.h>
 
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/server_builder.h>
@@ -7,13 +10,14 @@
 #include "address_response.h"
 #include "stream_response.h"
 #include "random_function.h"
+#include "data_chunk_stream_response.h"
 
-#include <iostream>
-
-class AddressBookService final : public demo_grpc::AddressBook::Service {
+class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 	public:
 		virtual ::grpc::Status GetAddress(::grpc::ServerContext* context, const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
 		{
+			std::cout << "GetAddress RPC is executed" << std::endl;
+			std::cout << "--------------------------" << std::endl;
 			switch (request->choose_area())
 			{
 			case 0:
@@ -56,38 +60,28 @@ class AddressBookService final : public demo_grpc::AddressBook::Service {
 			std::cout << "Information of " << request->choose_area() << " is sent to Client" << std::endl;
 			return grpc::Status::OK;
 		}
+
+	// function to work with Steam data using chunk
+	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context,
+	                                            ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
+	{
+		std::cout << "Stream chunk RPC is executed" << std::endl;
+		std::cout << "----------------------------" << std::endl;
+		Data_Chunk_Stream_Response(stream);
+
+		return grpc::Status::OK;
+	}
 };
 
 void RunServer()
 {
+	std::cout << "Server is running" << std::endl;
 	std::cout << "grpc Version: " << grpc::Version() << std::endl;
 	std::string server_address = "localhost:50051";
 	std::cout << "Address of server: " << server_address << std::endl;
 
-	// ssl_tsl try from gRPC source code
-	/*
-	constexpr char kServerCertPath[] = "/home/atif/grpc/src/core/tsi/test_creds/server1.pem";
-	constexpr char kServerKeyPath[]  = "/home/atif/grpc/src/core/tsi/test_creds/server1.key";
-	constexpr char kCaCertPath[]     = "/home/atif/grpc/src/core/tsi/test_creds/ca.pem";
-	grpc::SslServerCredentialsOptions ssl_opts;
-	ssl_opts.pem_key_cert_pairs.push_back({ReadFile(kServerKeyPath), ReadFile(kServerCertPath)});
-	ssl_opts.pem_root_certs =ReadFile(kCaCertPath);
-	*/
-
 	grpc::ServerBuilder builder;
 	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-	// builder.AddListeningPort(server_address, grpc::SslServerCredentials(ssl_opts));
-
-	// follwoing for get and send max size message
-	// builder.SetMaxMessageSize(3ULL * 1024 * 1024 * 1024);
-
-	// builder.SetMaxReceiveMessageSize(3ULL * 1024 * 1024 * 1024);
-	// builder.SetMaxSendMessageSize(3ULL * 1024 * 1024 * 1024);
-	/*
-	builder.SetMaxReceiveMessageSize(LONG_MAX);
-	builder.SetMaxSendMessageSize(LONG_MAX);
-	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-	*/
 
 	AddressBookService my_service;
 	builder.RegisterService(&my_service);

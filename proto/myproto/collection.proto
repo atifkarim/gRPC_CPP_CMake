@@ -1,0 +1,14 @@
+// This is the collection of all proto files
+
+syntax = "proto3";
+
+package demo_grpc;
+
+import "myproto/big_data.proto";
+import "myproto/addressbook.proto";
+
+service Demo_gRPC_Service {
+    rpc GetAddress(C_Request) returns (S_Response) {}
+
+    rpc Stream_Chunk_Service(stream Large_Data_Request) returns (stream Large_Data_Response) {}
+}

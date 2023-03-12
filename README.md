@@ -8,3 +8,6 @@
 - [This](https://github.com/grpc/grpc/issues/24918#issuecomment-741103013) solved the issue of ssl/tsl auth. This has taken `key .. cert` from gRPC source
 
 - A [source in C#](https://blog.noser.com/grpc-tutorial-teil-2-streaming-mit-grpc/) for stream message
+- A finding [regarding gRPC stream](https://stackoverflow.com/questions/67784384/c-grpc-clientasyncreaderwriter-how-to-check-if-data-is-available-for-read)
+- [Message length setting in gRPC](https://nanxiao.me/en/message-length-setting-in-grpc/)
+- Max size of message [rcv or sending?](https://github.com/grpc/grpc/issues/7882#issuecomment-242831397)

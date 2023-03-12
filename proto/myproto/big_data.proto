@@ -4,12 +4,15 @@ syntax = "proto3";
 
 package demo_grpc;
 
-message Streaming {
+message Streaming
+{
     repeated int32 data_collection = 1 [packed=true];
     int32 index = 2;
 }
 
 // Follwoing messages will be used for Bi-directional streaming (chunk data)
+
+// Client side message
 message Large_Data_Request {
     repeated int32 chunk_data_client_request = 1 [packed=true]; // Data container where chunk data will be stored to pass as stream from client to server
     uint32 client_data_stream_size = 2; // This will be the size of the whole data stream from client to server (Eg: Size of a vector. vec.size())
@@ -18,6 +21,7 @@ message Large_Data_Request {
     string name = 5; // Name name of the data stream
 }
 
+// Server side message
 message Large_Data_Response {
     repeated int32 chunk_data_server_response = 1 [packed=true]; // Data container to be used to do stream operation from server to client
     int32 server_data_stream_size = 2; // This will be the size of the whole data stream from server to client (Eg: Size of a vector. vec.size())

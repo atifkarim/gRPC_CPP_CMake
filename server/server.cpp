@@ -23,7 +23,6 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 			case 0:
 				try
 				{
-					std::cout << "****************** HEY I AM HERE , CASE " << request->choose_area() <<" !!!!!  ******************" << std::endl;
 					Set_Value_Address(request, response);
 				}
 				catch(const std::exception& e)
@@ -36,7 +35,6 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 			case 1:
 				try
 				{
-					std::cout << "****************** HEY I AM HERE , CASE " << request->choose_area() <<" !!!!!  ******************" << std::endl;
 					Set_Check_Value(request, response);
 				}
 				catch(const std::exception& e)
@@ -49,7 +47,6 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 			case 2:
 				try
 				{
-					std::cout << "****************** HEY I AM HERE , CASE " << request->choose_area() <<" !!!!!  ******************" << std::endl;
 					set_stream_value(request, response);
 				}
 				catch(const std::exception& e)
@@ -64,6 +61,7 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 			return grpc::Status::OK;
 		}
 
+	// function to work with Steam data using chunk
 	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context,
 	                                            ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
 	{

@@ -15,8 +15,6 @@ void grpc_client::get_chunk_number(uint64_t data_size,
 	// To convert this into KB we have to divide the prior result with 1024. Eg: (vector.size() * 4) / 1024
 	uint64_t data_size_kb = (4ULL * data_size) / 1024;
 
-	// TODO Still this calculation works only if the dataset or vector size is divided by 1024 and the quotient is ZERO
-	// Next step will be, if the quotient is not ZERO that means some values will be missing and those missing values will be counted here
 	float total_chunk_intermediate = static_cast<float>(data_size) / sample;
 	total_chunk = std::ceil(total_chunk_intermediate);
 }

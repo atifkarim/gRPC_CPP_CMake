@@ -18,7 +18,7 @@ add_executable(${MAIN_TARGET_NAME}_server ${${PROJECT_NAME}_SOURCE_DIR}/server/s
 target_include_directories(${MAIN_TARGET_NAME}_server PUBLIC ${CMAKE_BINARY_DIR}/proto/myproto
                                                              ${${PROJECT_NAME}_SOURCE_DIR}/include)
 
-# Link the server target to exported fw lib, proto lib
+# Link the server target to exported lib, proto lib
 target_link_libraries(${MAIN_TARGET_NAME}_server proto_lib)
 
 # Set the name of the binary file and the output directory

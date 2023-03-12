@@ -16,6 +16,8 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 	public:
 		virtual ::grpc::Status GetAddress(::grpc::ServerContext* context, const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
 		{
+			std::cout << "GetAddress RPC is executed" << std::endl;
+			std::cout << "--------------------------" << std::endl;
 			switch (request->choose_area())
 			{
 			case 0:
@@ -65,10 +67,8 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 	virtual ::grpc::Status Stream_Chunk_Service(::grpc::ServerContext* context,
 	                                            ::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
 	{
-		std::cout << "******" << std::endl
-		          << "Server" << std::endl
-		          << "******" << std::endl;
-
+		std::cout << "Stream chunk RPC is executed" << std::endl;
+		std::cout << "----------------------------" << std::endl;
 		// This vector will hold all data which will be transferred from client platform
 		std::vector<int32_t> server_dummy_data_set;
 
@@ -150,6 +150,7 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 
 void RunServer()
 {
+	std::cout << "Server is running" << std::endl;
 	std::cout << "grpc Version: " << grpc::Version() << std::endl;
 	std::string server_address = "localhost:50051";
 	std::cout << "Address of server: " << server_address << std::endl;

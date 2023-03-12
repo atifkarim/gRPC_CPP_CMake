@@ -1,6 +1,6 @@
 #include <iostream>
 
-// This function prepare firmware to initialize and set value for corresponding protobuf message
+// This function prepare data block to initialize and set value for corresponding protobuf message
 void set_stream_value(const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
 {
 	std::cout << "**********############################### Stream Data is in Server" << std::endl;

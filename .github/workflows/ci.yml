@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - format_project
+
+jobs:
+  build_gRPC_project:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: eWaterCycle/setup-grpc@v5
+      with:
+        grpc-version: 1.51.1
+
+    - name: Build
+      run: |
+          mkdir build && cd build
+          cmake .. && make

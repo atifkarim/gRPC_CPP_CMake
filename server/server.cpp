@@ -1,3 +1,13 @@
+/**
+ * @file server.cpp
+ * @author MD Atif Bin Karim
+ * @brief This file process all request to server
+ * @date 21-03-2023
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #include <iostream>
 
 #include <big_data.pb.h>
@@ -8,6 +18,7 @@
 #include <grpcpp/server_builder.h>
 
 #include "address_response.h"
+#include "value_response.h"
 #include "stream_response.h"
 #include "random_function.h"
 #include "data_chunk_stream_response.h"
@@ -35,7 +46,7 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 			case 1:
 				try
 				{
-					Set_Check_Value(request, response);
+					Double_Value(request, response);
 				}
 				catch(const std::exception& e)
 				{

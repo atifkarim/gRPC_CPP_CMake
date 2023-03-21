@@ -1,0 +1,14 @@
+// This file holds the message format for processing number
+
+syntax = "proto3";
+
+package demo_grpc;
+
+message Number_Response {
+    float double_init_val = 1;
+}
+
+message Number_Request {
+    string name = 1;
+    float init_val = 2;
+}

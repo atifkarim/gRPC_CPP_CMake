@@ -7,6 +7,7 @@
 
 #include <big_data.pb.h>
 #include <addressbook.grpc.pb.h>
+#include <number_data.grpc.pb.h>
 #include <collection.grpc.pb.h>
 
 #include <grpcpp/grpcpp.h>

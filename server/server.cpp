@@ -12,6 +12,7 @@
 
 #include <big_data.pb.h>
 #include <addressbook.grpc.pb.h>
+#include <number_data.grpc.pb.h>
 #include <collection.grpc.pb.h>
 
 #include <grpcpp/grpcpp.h>
@@ -44,18 +45,6 @@ class All_gRPC_Service final : public demo_grpc::Demo_gRPC_Service::Service
 				}
 			break;
 
-			case 1:
-				try
-				{
-					Double_Value(request, response);
-				}
-				catch(const std::exception& e)
-				{
-					std::cout << e.what() << std::endl;
-					return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
-				}
-			break;
-
 			case 2:
 				try
 				{
@@ -70,6 +59,26 @@ class All_gRPC_Service final : public demo_grpc::Demo_gRPC_Service::Service
 			}
 
 			std::cout << "Information of " << request->choose_area() << " is sent to Client" << std::endl;
+			return grpc::Status::OK;
+		}
+
+	// function to work with ProcessNumber service
+
+	virtual ::grpc::Status ProcessNumber(::grpc::ServerContext* context, const ::demo_grpc::Number_Request* request, ::demo_grpc::Number_Response* response)
+		{
+			std::cout << "ProcessNumber RPC is executed" << std::endl;
+			std::cout << "--------------------------" << std::endl;
+			try
+			{
+				Double_Value(request, response);
+			}
+			catch(const std::exception& e)
+			{
+				std::cout << e.what() << std::endl;
+				return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+			}
+
+			std::cout << "Information of " << request->name() << " is sent to Client" << std::endl;
 			return grpc::Status::OK;
 		}
 

@@ -11,6 +11,7 @@ find_package(Threads)
 set(PROTO_FILES
     ${${PROJECT_NAME}_SOURCE_DIR}/proto/myproto/big_data.proto
     ${${PROJECT_NAME}_SOURCE_DIR}/proto/myproto/addressbook.proto
+    ${${PROJECT_NAME}_SOURCE_DIR}/proto/myproto/number_data.proto
     ${${PROJECT_NAME}_SOURCE_DIR}/proto/myproto/collection.proto
 )
 

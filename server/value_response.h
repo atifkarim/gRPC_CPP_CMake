@@ -5,7 +5,7 @@
  * @param response
  */
 
-void Double_Value(const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
+void Double_Value(const ::demo_grpc::Number_Request* request, ::demo_grpc::Number_Response* response)
 {
 	if (request->init_val() >= 0 && request->init_val() < 5)
 		std::cout << "Client is requested for value: " << request->init_val() << std::endl;

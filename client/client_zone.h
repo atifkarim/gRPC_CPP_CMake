@@ -25,13 +25,13 @@ class grpc_client
 		            : stub(demo_grpc::Demo_gRPC_Service::NewStub(channel)), detected_task(task_name(button_)) , button(button_) {}
 
 		// Function to process address request
-		void address_request();
+		void Address_Request();
 
 		// This is a dummy function which doubles the value if it is less than
 		void Double_Value_Request();
 
 		// Function to process sending stream data
-		void data_chunk_stream_request();
+		void Data_Stream_Request();
 
 	private:
 		std::unique_ptr<demo_grpc::Demo_gRPC_Service::Stub> stub;

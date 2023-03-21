@@ -13,7 +13,7 @@ void grpc_client::get_chunk_number(uint64_t data_size,
 	total_chunk = std::ceil(total_chunk_intermediate);
 }
 
-void grpc_client::data_chunk_stream_request()
+void grpc_client::Data_Stream_Request()
 {
 	demo_grpc::Large_Data_Request request_;
 	demo_grpc::Large_Data_Response response_;

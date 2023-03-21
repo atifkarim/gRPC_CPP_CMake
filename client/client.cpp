@@ -15,9 +15,9 @@ void Client_Request(std::shared_ptr<grpc::Channel> channel)
 
 	switch(task_number)
 	{
-		case 0: {grpc_client address_req(channel, task_number); address_req.address_request(); break;}
+		case 0: {grpc_client address_req(channel, task_number); address_req.Address_Request(); break;}
 		case 1: {grpc_client value_req(channel, task_number); value_req.Double_Value_Request(); break;}
-		case 2: {grpc_client stream_chunk_req(channel, task_number); stream_chunk_req.data_chunk_stream_request(); break;}
+		case 2: {grpc_client stream_chunk_req(channel, task_number); stream_chunk_req.Data_Stream_Request(); break;}
 		default: throw std::runtime_error("No Service is added against this Wish"); break;
 	}
 }

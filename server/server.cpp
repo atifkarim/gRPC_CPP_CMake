@@ -78,7 +78,7 @@ class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
 	{
 		std::cout << "Stream chunk RPC is executed" << std::endl;
 		std::cout << "----------------------------" << std::endl;
-		Data_Chunk_Stream_Response(stream);
+		Data_Stream_Response(stream);
 
 		return grpc::Status::OK;
 	}

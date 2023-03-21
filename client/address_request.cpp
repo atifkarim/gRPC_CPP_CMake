@@ -1,7 +1,7 @@
 #include "client_zone.h"
 
 // This function prepare address related param (eg: user name) to transfer from Client to the Server
-void grpc_client::address_request()
+void grpc_client::Address_Request()
 {
 	demo_grpc::C_Request request_;
 	demo_grpc::S_Response response_;

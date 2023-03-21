@@ -7,7 +7,7 @@
 
 #include <numeric>
 
-void Data_Chunk_Stream_Response(::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
+void Data_Stream_Response(::grpc::ServerReaderWriter< ::demo_grpc::Large_Data_Response, ::demo_grpc::Large_Data_Request>* stream)
 {
 	// Instance of request and response from client & server respectively
 	demo_grpc::Large_Data_Request request;

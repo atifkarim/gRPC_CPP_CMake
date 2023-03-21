@@ -13,7 +13,7 @@ message S_Response {
     string city     = 4;
     string country  = 5;
 
-    int32 double_init_val = 6;
+    float double_init_val = 6;
 
     Streaming server_data_collection = 7;
 }
@@ -21,7 +21,7 @@ message S_Response {
 message C_Request {
     uint32 choose_area = 1;
     string name = 2;
-    int32 init_val = 3;
+    float init_val = 3;
 
     Streaming client_data_collection = 4;
 

@@ -1,16 +1,16 @@
 #include "client_zone.h"
 
-void grpc_client::check_value_request()
+void grpc_client::Double_Value_Request()
 {
 	demo_grpc::C_Request request_;
 	demo_grpc::S_Response response_;
 
-	unsigned int value_;
-	std::cout << "Provide a valid value less than or equal to 5 : ";
+	float value_;
+	std::cout << "Provide a positive value less than or equal to 5 : ";
 	std::cin >> value_;
 
 	request_.set_init_val(value_);
-	request_.set_area_field(detected_area_name);
+	request_.set_area_field(detected_task);
 	request_.set_choose_area(button);
 
 	grpc::ClientContext context;

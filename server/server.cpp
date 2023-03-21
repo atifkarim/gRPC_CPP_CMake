@@ -23,7 +23,8 @@
 #include "random_function.h"
 #include "data_chunk_stream_response.h"
 
-class AddressBookService final : public demo_grpc::Demo_gRPC_Service::Service {
+class All_gRPC_Service final : public demo_grpc::Demo_gRPC_Service::Service
+{
 	public:
 		virtual ::grpc::Status GetAddress(::grpc::ServerContext* context, const ::demo_grpc::C_Request* request, ::demo_grpc::S_Response* response)
 		{
@@ -94,7 +95,7 @@ void RunServer()
 	grpc::ServerBuilder builder;
 	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
 
-	AddressBookService my_service;
+	All_gRPC_Service my_service;
 	builder.RegisterService(&my_service);
 
 	std::unique_ptr<grpc::Server> server(builder.BuildAndStart());

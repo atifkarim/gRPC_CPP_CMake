@@ -11,7 +11,7 @@ void grpc_client::address_request()
 	std::cin >> name_;
 
 	request_.set_name(name_);
-	request_.set_area_field(detected_area_name);
+	request_.set_area_field(detected_task);
 	request_.set_choose_area(button);
 
 	grpc::ClientContext context;

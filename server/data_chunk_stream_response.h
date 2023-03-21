@@ -1,7 +1,9 @@
-/*
-This is the service response algorithm from server to pass
-stream data using chunk
-*/
+/**
+ * @file data_chunk_stream_response.h
+ * @author MD Atif Bin Karim
+ * @brief This is the service response algorithm from server to pass stream data using chunk
+ * @date 21-03-2023
+ */
 
 #include <numeric>
 

@@ -1,11 +1,5 @@
 #include "client_zone.h"
 
-// Calculates the number of chunk
-/**
- * \param [in] data_size Total size of given/provided data which will be passed as chunk. Eg: myvec.size()
- * \param [in] chunk_size Chunk size in KiloByte. This chunk size will be given by the user. Right now less than 64 KB is not allowed
- * \param [in] sample Data sample in each chunk
- */
 void grpc_client::get_chunk_number(uint64_t data_size,
                                    uint64_t chunk_size,
                                    uint64_t &sample,
@@ -19,7 +13,6 @@ void grpc_client::get_chunk_number(uint64_t data_size,
 	total_chunk = std::ceil(total_chunk_intermediate);
 }
 
-// After producing large data set it passes them & get response from server as chunk
 void grpc_client::data_chunk_stream_request()
 {
 	demo_grpc::Large_Data_Request request_;
@@ -78,7 +71,7 @@ void grpc_client::data_chunk_stream_request()
 	request_.set_chunk_data_length(sample);
 	request_.set_client_data_stream_size(dummy_data_set.size());
 	request_.set_required_chunk(total_chunk);
-	request_.set_name(detected_area_name);
+	request_.set_name(detected_task);
 
 	grpc::ClientContext context;
 	std::shared_ptr<::grpc::ClientReaderWriter< ::demo_grpc::Large_Data_Request, ::demo_grpc::Large_Data_Response> > stream(stub->Stream_Chunk_Service(&context));

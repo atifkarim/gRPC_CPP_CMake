@@ -21,3 +21,17 @@ jobs:
       run: |
           mkdir build && cd build
           cmake .. && make
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: binaries
+        path: |
+          gRPC_CPP_CMake/bin/*
+          gRPC_CPP_CMake/lib/*
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: binaries
+        path: binaries/

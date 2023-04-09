@@ -30,8 +30,8 @@ jobs:
       with:
         name: binaries
         path: |
-          gRPC_CPP_CMake/bin/*
-          gRPC_CPP_CMake/lib/*
+          /home/runner/work/gRPC_CPP_CMake/gRPC_CPP_CMake/bin/*
+          /home/runner/work/gRPC_CPP_CMake/gRPC_CPP_CMake/lib/*
 
     - name: Download artifacts
       uses: actions/download-artifact@v2

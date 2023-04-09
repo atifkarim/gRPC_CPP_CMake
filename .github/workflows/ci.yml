@@ -21,12 +21,12 @@ jobs:
       run: |
           mkdir build && cd build
           cmake .. && make
+          cd ..
+          pwd
+          ls
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
-      run: |
-          pwd
-          ls
       with:
         name: binaries
         path: |
